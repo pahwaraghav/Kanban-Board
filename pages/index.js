@@ -22,6 +22,11 @@ export default function Home() {
         </Center>
 
         <Board />
+        <Center>
+          <Heading fontSize="lg" center color="white" mt={4}>
+            Made with ❤️ By Raghav Pahwa.
+          </Heading>
+        </Center>
       </Container>
     </Box>
   );
