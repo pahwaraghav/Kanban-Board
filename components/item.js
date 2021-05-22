@@ -42,7 +42,6 @@ function Item({ item, index, columns, setColumns, column, columnId }) {
         items: addedItems,
       },
     });
-    setDescription("");
     onClose();
   };
   const handleDelete = (item) => {
