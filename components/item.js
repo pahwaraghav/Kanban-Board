@@ -21,24 +21,28 @@ function Item({ item, index, columns, setColumns, column, columnId }) {
   const [description, setDescription] = useState(item.description);
 
   const handleSave = (item) => {
-    //console.log(column);
-    // const addedColumn = columns[columnId];
-    // console.log(addedColumn);
-    // let addedItems = addedColumn.items.filter((column) => column.id != item.id);
-    // addedItems = [
-    //   ...addedItems,
-    //   { id: item.id, content: item.content, description },
-    // ];
-    // console.log(addedColumn);
+    console.log(column);
+    const addedColumn = columns[columnId];
+    console.log(item.id);
+    const addedItems = addedColumn.items.map((currentItem) => {
+      console.log(currentItem);
+      if (currentItem.id != item.id) return currentItem;
+      else {
+        return {
+          ...currentItem,
+          description: description,
+        };
+      }
+    });
 
-    // setColumns({
-    //   ...columns,
-    //   [columnId]: {
-    //     ...addedColumn,
-    //     items: addedItems,
-    //   },
-    // });
-    // setDescription("");
+    setColumns({
+      ...columns,
+      [columnId]: {
+        ...addedColumn,
+        items: addedItems,
+      },
+    });
+    setDescription("");
     onClose();
   };
   const handleDelete = (item) => {
@@ -83,6 +87,7 @@ function Item({ item, index, columns, setColumns, column, columnId }) {
                 <ModalCloseButton />
                 <ModalBody>
                   <Textarea
+                    placeholder="Add description"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                   />
@@ -92,7 +97,7 @@ function Item({ item, index, columns, setColumns, column, columnId }) {
                   <Button
                     colorScheme="blue"
                     mr={3}
-                    onClick={(e) => handleSave(e, item)}
+                    onClick={() => handleSave(item)}
                   >
                     Save
                   </Button>
