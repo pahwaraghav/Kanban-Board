@@ -14,11 +14,45 @@ import {
   ModalFooter,
   Button,
   Textarea,
+  Editable,
+  EditableInput,
+  EditablePreview,
+  useEditableControls,
+  Flex,
+  IconButton,
+  ButtonGroup,
 } from "@chakra-ui/react";
+
+import { EditIcon, CheckIcon, CloseIcon } from "@chakra-ui/icons";
 
 function Item({ item, index, columns, setColumns, column, columnId }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [description, setDescription] = useState(item.description);
+  const [content, setContent] = useState(item.content);
+
+  const handleTitleChange = (item) => {
+    console.log("Current item is");
+    console.log(item);
+    const addedColumn = columns[columnId];
+    const addedItems = addedColumn.items.map((currentItem) => {
+      if (currentItem.id != item.id) return currentItem;
+      else {
+        console.log(currentItem);
+        return {
+          ...currentItem,
+          content: content,
+        };
+      }
+    });
+
+    setColumns({
+      ...columns,
+      [columnId]: {
+        ...addedColumn,
+        items: addedItems,
+      },
+    });
+  };
 
   const handleSave = (item) => {
     console.log(column);
@@ -58,6 +92,29 @@ function Item({ item, index, columns, setColumns, column, columnId }) {
     });
     onClose();
   };
+
+  function EditableControls() {
+    const {
+      isEditing,
+      getSubmitButtonProps,
+      getCancelButtonProps,
+      getEditButtonProps,
+    } = useEditableControls();
+
+    return isEditing ? (
+      <ButtonGroup justifyContent="center" size="sm" ml={3}>
+        <IconButton icon={<CheckIcon />} {...getSubmitButtonProps()} />
+        <IconButton icon={<CloseIcon />} {...getCancelButtonProps()} />
+      </ButtonGroup>
+    ) : (
+      <IconButton
+        ml={2}
+        size="sm"
+        icon={<EditIcon />}
+        {...getEditButtonProps()}
+      />
+    );
+  }
   return (
     <Draggable key={item.id} draggableId={item.id} index={index}>
       {(provided, snapshot) => {
@@ -82,7 +139,22 @@ function Item({ item, index, columns, setColumns, column, columnId }) {
             <Modal isOpen={isOpen} onClose={onClose}>
               <ModalOverlay />
               <ModalContent>
-                <ModalHeader>{item.content}</ModalHeader>
+                <ModalHeader>
+                  <Editable
+                    textAlign="center"
+                    defaultValue={item.content}
+                    fontSize="2xl"
+                    isPreviewFocusable={false}
+                    onSubmit={() => handleTitleChange(item)}
+                  >
+                    <EditablePreview />
+                    <EditableInput
+                      width="70%"
+                      onInput={(e) => setContent(e.target.value)}
+                    />
+                    <EditableControls item={item} />
+                  </Editable>
+                </ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                   <Textarea
