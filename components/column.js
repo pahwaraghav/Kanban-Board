@@ -41,7 +41,7 @@ function Column({ columnId, column, columns, setColumns }) {
       //   overflow="auto"
     >
       <Heading as="h2" size="xl" color="white">
-        {column.name}
+        {column.name} - {column.items.length}
       </Heading>
       <Box mx={4}>
         <Droppable droppableId={columnId} key={columnId}>
