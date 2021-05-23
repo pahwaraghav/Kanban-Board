@@ -7,7 +7,6 @@ import {
 } from "react-beautiful-dnd-next";
 import { v4 as uuidv4 } from "uuid";
 //import { uuid } from 'uuidv4';
-import { useRouter } from "next/router";
 
 import items from "./items";
 import categories from "./categories";
@@ -16,7 +15,7 @@ import Item from "./item";
 import Column from "./column";
 import { Input } from "@chakra-ui/input";
 
-const onDragEnd = (result, columns, setColumns, router) => {
+const onDragEnd = (result, columns, setColumns) => {
   if (!result.destination) return;
   const { source, destination } = result;
 
@@ -51,13 +50,10 @@ const onDragEnd = (result, columns, setColumns, router) => {
       },
     });
   }
-  setTimeout(() => router.push("/"), 10);
 };
 
 function Board() {
   const [columns, setColumns] = useState(categories(items));
-
-  const router = useRouter();
 
   useEffect(() => {
     const localColumns = JSON.parse(window.localStorage.getItem("columns"));
@@ -72,7 +68,7 @@ function Board() {
   return (
     <Flex justify="center" direction={{ base: "column", md: "row" }}>
       <DragDropContext
-        onDragEnd={(result) => onDragEnd(result, columns, setColumns, router)}
+        onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
       >
         {Object.entries(columns).map(([columnId, column], index) => {
           return (

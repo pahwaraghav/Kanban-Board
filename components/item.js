@@ -159,6 +159,7 @@ function Item({ item, index, columns, setColumns, column, columnId }) {
                 <ModalBody>
                   <Textarea
                     placeholder="Add description"
+                    defaultValue={item.description}
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                   />
